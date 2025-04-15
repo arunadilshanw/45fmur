@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Online Users Count</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 100px;
+    }
+    #online-count {
+      font-size: 3em;
+      color: green;
+    }
+  </style>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body>
+  <h1>Users Online Right Now</h1>
+  <p id="online-count">0</p>
+
+  <script>
+    // Replace this with your Firebase project config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCcerqk99gwqzN5XR_5Q0qLeAW51nodQ-s",
+      authDomain: "live-user-count-for-45th-a4783.firebaseapp.com",
+      databaseURL: "https://live-user-count-for-45th-a4783.firebaseio.com",
+      projectId: "live-user-count-for-45th-a4783",
+      storageBucket: "live-user-count-for-45th-a4783.firebasestorage.app",
+      messagingSenderId: "163805631762",
+      appId: "1:163805631762:web:4c5b032de858d8686acfcb"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const onlineUsersRef = db.ref("onlineUsers");
+
+    // Add this user to the list
+    const myRef = onlineUsersRef.push(true);
+    myRef.onDisconnect().remove(); // Remove when they disconnect
+
+    // Listen for changes in the number of users
+    onlineUsersRef.on("value", (snapshot) => {
+      const count = snapshot.numChildren();
+      document.getElementById("online-count").textContent = count;
+    });
+  </script>
+</body>
+</html>
